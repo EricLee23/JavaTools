@@ -1,20 +1,69 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ericlee</groupId>
-	<artifactId>javatools</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name />
+	
 	<description />
+	
+	<modelVersion>4.0.0</modelVersion>
+	<!-- 标识公司或组织中的特定项目或一组程序库 -->
+	<groupId>ericlee</groupId>
+	<!-- 项目的实际名称 -->
+	<artifactId>javatools</artifactId>
+	<!-- 当前的版本号 -->
+	<version>0.0.1-SNAPSHOT</version>
+	<!-- 交付软件包的类型 -->
+	<packaging>war</packaging>
+	
+	<!-- 以下配置主要用于生产Maven项目网站 -->
+	<name></name>
+	<url>http://localhost/</url>
+	<scm>
+		<connection></connection>
+		<developerConnection></developerConnection>
+		<url></url>
+	</scm>
+	<issueManagement>
+		<system></system>
+		<url></url>
+	</issueManagement>
+	<inceptionYear>2014</inceptionYear>
+	
+	<!-- 声明持续集成服务 -->
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://localhost:8080/</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<address>mail@mail.com</address>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+	
+	<!-- 定义开发团队 -->
+	<developers>
+		<developer>
+			<id>001</id>
+			<name>xiaodong.li</name>
+			<email>xiaodong.li@supwisdom.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+			<organization>SW</organization>
+			<timezone>+8</timezone>
+		</developer>
+	</developers>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- 可以集中设定版本号 -->
+		<javaee-api.version>5.0-1</javaee-api.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.openejb</groupId>
 			<artifactId>javaee-api</artifactId>
-			<version>5.0-1</version>
+			<version>${javaee-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -58,12 +107,23 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- 可以使用系统依赖库 
+		<dependency>
+			<groupId>xx</groupId>
+			<artifactId>xx</artifactId>
+			<version>xx</version>
+			<scope>system</scope>
+			<systemPath>xxx</systemPath>
+		</dependency>-->
 	</dependencies>
+	
 	<build>
 		<plugins>
+			<!--  -->
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 			</plugin>
+			<!-- Java编译插件 不指定则使用默认JDK -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -72,5 +132,47 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
+		<!-- 可以增加需要打包的资源 定义那些文件需要过滤变量 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>		
+		</resources> 
 	</build>
+	
+	<!-- 设置各类报告生成 -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<configLocation>config/maven_checks.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>	
+	</reporting>
+	
+	<!-- 配置不同环境定制构建生命周期的有用方法 -->
+	<profiles>
+		<!-- 开发环境配置 -->
+		<profile>
+			<id>development</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<target.name>测试环境</target.name>
+			</properties>
+		</profile>
+		<!-- 测试环境配置 -->
+		<profile>
+			<id>test</id>
+			<properties>
+				<target.name>开发环境</target.name>
+			</properties>
+		</profile>
+	</profiles>
 </project>
